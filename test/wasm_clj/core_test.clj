@@ -2,6 +2,24 @@
   (:require [clojure.test :refer :all]
             [wasm-clj.core :refer :all]))
 
+;; Control instructions
+
+(deftest test-nop
+
+  ;; Test basic operation
+  (is (= {:stack []}
+         (-> initial-state (nop)))
+      "Test u32.const zero value")
+  (is (= {:stack [42]}
+         (-> initial-state (u32-const 42) (nop)))
+      "Test u32.const positive value"))
+
+(deftest test-unreachable
+  (try
+    (-> initial-state (u32-const 42) (unreachable))
+    (catch Exception e
+      (is (= {:stack [42]} (get (ex-data e) :state))))))
+
 (deftest test-s32-const
 
   ;; Test basic operation

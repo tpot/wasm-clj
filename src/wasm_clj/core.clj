@@ -33,3 +33,16 @@
         b (last (butlast stack))
         newstate (merge state {:stack (pop (pop stack))})]
     (u32-const newstate (bit-and (+ a b) 0xffffffff))))
+
+;; Control instructions
+
+(defn unreachable
+  "Throw an exception"
+  [state]
+  (throw (ex-info "Unreachable"
+                  {:state state})))
+
+(defn nop
+  "No operation - no change of state"
+  [state]
+  state)
